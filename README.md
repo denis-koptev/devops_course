@@ -1,1 +1,1 @@
-# devops_course
+# Dell EMC DevOps course
