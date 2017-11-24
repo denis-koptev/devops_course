@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require "yaml"
+
+current_dir = File.dirname(File.expand_path(__FILE__))
+yaml_config = YAML.load_file("#{current_dir}/config.yaml")
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.network "forwarded_port", guest: 80, host: 8090
+
+  config.vm.synced_folder ".", "/home/#{yaml_config['user']}/virtualenvs/#{yaml_config['domain_name']}"
+  config.vm.synced_folder "manifests/files", yaml_config["inc_file_path"]
+
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "site.pp"
+    puppet.facter = {
+      "inc_file_path" => yaml_config["inc_file_path"],
+      "user"          => yaml_config["user"],
+      "password"      => yaml_config["password"],
+      "project"       => yaml_config["project"],
+      "domain_name"   => yaml_config["domain_name"],
+      "db_name"       => yaml_config["db_name"],
+      "db_user"       => yaml_config["db_user"],
+      "db_password"   => yaml_config["db_password"],
+    }
+
+  end
+
+end

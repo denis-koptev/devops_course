@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Main Page</title>
+</head>
+
+<body>
+
+	<h1 align="center">Welcome to the Main Page of the Test Site</h1>
+	<hr>
+	<div align="center">
+
+		<h2>1. Table of students</h2>
+
+		<!-- students - list received from python server -->
+
+		<table border="1" width="50%">
+			<tr>
+				<td align="center">
+					<b>Base ID</b>
+				</td>
+				<td align="center">
+					<b>Name</b>
+				</td>
+			</tr>
+			{% for st in students %}
+			<tr>
+				<td width="10%" align="center">
+					{{st.id}}
+				</td>
+				<td align="center">
+					{{st.name}}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+
+	</div>
+
+</body>
+
+</html>

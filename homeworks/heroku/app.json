@@ -1,0 +1,9 @@
+{
+  "name": "Django server for Heroku",
+  "description": "Django web-server configured for automatical deployment on Heroku",
+  "image": "heroku/python",
+  "repository": "https://github.com/denis-koptev/django_test#heroku",
+  "branch": "heroku",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ]
+}

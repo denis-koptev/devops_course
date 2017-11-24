@@ -1,0 +1,100 @@
+{% load staticfiles %}
+
+<html>
+
+<head>
+
+    <title>
+        Main - TestSite
+    </title>
+
+    <link type="text/css" rel="stylesheet" href="{% static "/css/main_page_style.css" %}"></link>
+    <script type="text/javascript" src="{% static "/js/jquery-3.1.1.js" %}"></script>
+    <script type="text/javascript" src="{% static "/js/scroll_actions.js" %}"></script>
+
+</head>
+
+
+<body>
+
+    <!-- CONTENT -->
+
+    <div id="sections">
+
+        <!-- HEADER SECTION -->
+
+        <section class="header_content" id="header">
+
+            <table class="cell_table">
+                <tr>
+                    <td class="cell_td">
+                        <div class="header_div">
+                            <div class="header_text">
+                                Welcome to TestSite for DevOps course!
+                            </div>
+                        </div>
+                        <br>
+
+                        <p></p>
+                        <a href="#intro"><img src="{% static "/image/arrow_down.svg" %}" class="nav_arrow"></a>
+                    </td>
+                </tr>
+            </table>
+
+        </section>
+
+        <!-- INTRO SECTION -->
+
+        <section class="intro_content" id="intro">
+
+            <a name="intro"></a>
+            <table class="cell_table">
+                <tr>
+                    <td class="cell_td">
+                        <div class="intro_text">   
+                            Our students. 43504/1
+                        </div>
+                        
+                        <div class="intro_text">
+
+                            {% if students|length == 0 %}
+                                <font size="5">Sorry. Database is empty for now.</font>
+                            {% else %}
+                            <table class="stud_table">
+                                <tr>
+                                    <td>
+                                        <b>Base ID</b>
+                                    </td>
+                                    <td>
+                                        <b>Name</b>
+                                    </td>
+                                </tr>
+                                {% for st in students %}
+                                <tr>
+                                    <td width="10%">
+                                        {{st.id}}
+                                    </td>
+                                    <td align="center">
+                                        {{st.name}}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% endif %}
+                        </div>
+
+                        <p></p>
+                        <a href="#header"><img src="{% static "/image/arrow_up.svg" %}" class="nav_arrow"></a>
+                    </td>
+                </tr>
+            </table>
+
+        </section>
+
+    </div>
+
+    {% include "footer.html" %}
+
+</body>
+
+</html>

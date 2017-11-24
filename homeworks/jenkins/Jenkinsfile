@@ -1,0 +1,61 @@
+#!groovy
+
+node {
+
+    stage ("Updating sources from SCM") {
+        git 'https://github.com/denis-koptev/django_test'
+    }
+
+    stage ("Installing dependencies") {
+        sh '''
+            pip3 install -r requirements.txt
+        '''
+    }
+
+    stage ("Running tests") {
+        def testError = null
+
+        try {
+            sh '''
+                python3 test_site/manage.py jenkins --enable-coverage
+            '''
+        }
+        catch (err) {
+            testError = err
+            currentBuild.result = 'FAILURE'
+        }
+        finally {
+            if (testError) {
+                throw testsError
+            }
+        }
+    }
+    
+    stage("Reporting results") {
+        junit allowEmptyResults: true, testResults: 'reports/junit*.xml'
+        step([
+            $class: 'WarningsPublisher',
+            parserConfigurations: [[parserName: 'Pep8', pattern: 'reports/pep8.report']], 
+            usePreviousBuildAsReference: true
+        ])
+        step([
+            $class: 'WarningsPublisher',
+            parserConfigurations: [[parserName: 'PyLint', pattern: 'reports/pylint.report']], 
+            usePreviousBuildAsReference: true
+        ])
+        step([
+            $class: 'CoberturaPublisher',
+            autoUpdateStability: false, 
+            coberturaReportFile: 'reports/coverage.xml', 
+            conditionalCoverageTargets: '70, 0, 0', 
+            failUnhealthy: false, 
+            failUnstable: false, 
+            lineCoverageTargets: '80, 0, 0', 
+            maxNumberOfBuilds: 0,
+            methodCoverageTargets: '80, 0, 0', 
+            onlyStable: false, 
+            sourceEncoding: 'ASCII', 
+            zoomCoverageChart: false
+        ])
+    }
+}

@@ -1,0 +1,19 @@
+db:
+  container_name: db
+  build: build_db
+  environment:
+    MYSQL_DATABASE: test_site_db
+    MYSQL_USER: test_user
+    MYSQL_USER_PASSWORD: user
+    MYSQL_PASSWORD: user
+    MYSQL_ROOT_PASSWORD: user
+
+web:
+  container_name: web
+  build: build_web
+  ports:
+    - "8000:8000"
+  links:
+    - db:db
+  tty: true
+  command: sh /start_site.sh
